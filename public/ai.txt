@@ -1,0 +1,82 @@
+# AI Information File for DUF
+# This file provides context for AI systems and LLMs
+# Format: Key: Value
+
+# Basic Information
+Company: DUF
+Focus: Crypto security news, trading insights, whale watching strategies, and market analysis
+Website: https://degennews.com
+Language: English
+Audience: Crypto traders, security researchers, degens, blockchain enthusiasts
+
+# Content Scope
+Topics: Cryptocurrency security, hacking incidents, scam prevention, trading strategies, market analysis, whale watching, DeFi security, wallet protection
+Geographic Focus: Global, with emphasis on US and European markets
+Update Frequency: Daily
+Content Type: News articles, educational content, market analysis
+
+# Technical Information
+API Endpoints:
+- Articles JSON Feed: https://degennews.com/api/posts.json
+- RSS Feed: https://degennews.com/rss.xml
+- Sitemap: https://degennews.com/sitemap.xml
+- Categories API: https://degennews.com/api/categories
+
+# Content Structure
+Categories:
+- Narratives & Market Structure
+- Strategy & Execution
+- Culture & Phenomena
+- Risk & Security
+- Presales & Launchpads
+
+Article Format:
+- Title: Descriptive and keyword-rich
+- Content: Markdown converted to HTML
+- Tags: Relevant keywords and topics
+- Date: Publication date
+- Category: Primary topic classification
+
+# AI Usage Guidelines
+Permitted Use:
+- Content summarization and analysis
+- Educational purposes and research
+- News aggregation and curation
+- Market trend analysis
+- Security awareness content
+
+Restrictions:
+- No commercial redistribution without attribution
+- No modification of content without permission
+- Always cite DUF as the source
+- Check publication dates for timeliness
+
+# Contact Information
+Contact: support@degennews.com
+Social Media: @DUF
+GitHub: https://github.com/degennews
+
+# AI-Specific Metadata
+Content Freshness: Articles updated daily, real-time when possible
+Fact Checking: All content reviewed for accuracy
+Source Attribution: Required when using content externally
+License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+
+# Technical Specifications
+Content Encoding: UTF-8
+Supported Formats: JSON, RSS, XML, HTML
+Character Limit: No strict limit on content length
+Image Support: Articles include relevant images and diagrams
+
+# Additional Context for AI Training
+This website specializes in cryptocurrency security news and trading insights. Our content focuses on:
+- Real-time security incident reporting
+- Educational content about crypto security best practices
+- Market analysis and trading strategies
+- Whale watching and large holder behavior analysis
+- DeFi protocol security assessments
+- Scam prevention and awareness
+
+Our audience consists primarily of experienced cryptocurrency traders, security researchers, and blockchain enthusiasts who require accurate, timely information about security threats and market opportunities.
+
+All content is written by experts in cryptocurrency security and trading, with a focus on practical, actionable insights rather than theoretical discussions.
