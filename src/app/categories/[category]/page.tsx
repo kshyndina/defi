@@ -14,6 +14,14 @@ interface CategoryPageProps {
   }>;
 }
 
+// Helper function to limit articles to 2-4 cards
+const limitArticles = (articles: any[]): any[] => {
+  // Ensure minimum of 2 cards and maximum of 4 cards
+  if (articles.length <= 2) return articles;
+  if (articles.length >= 4) return articles.slice(0, 4);
+  return articles.slice(0, Math.max(2, Math.min(4, articles.length)));
+};
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
 
@@ -24,13 +32,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   // Get all articles and filter by category
   const allArticles = await googleSheetsService.getAllArticles();
-  const categoryArticles = allArticles.filter(
+  let categoryArticles = allArticles.filter(
     (article) => article.category.toLowerCase() === categoryName.toLowerCase()
   );
 
   if (categoryArticles.length === 0) {
     notFound();
   }
+
+  // Limit articles to 2-4 cards
+  categoryArticles = limitArticles(categoryArticles);
 
   // Generate structured data for category page
   const categoryStructuredData = {
@@ -67,25 +78,27 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         structuredData={categoryStructuredData}
       />
 
-      <main className="px-4 py-8">
-        <section className="mb-16">
-          <div className="flex items-center mb-8">
-            <h1 className="text-3xl font-bold text-dark-text">
-              {categoryName}
-            </h1>
-            <div className="ml-3 gold-accent-dot"></div>
-          </div>
-          <p className="text-medium-text mb-8">
-            Browse the latest articles in {categoryName}
-          </p>
+      <div className="min-h-screen text-foreground">
+        <main className="px-4 py-8">
+          <section className="mb-16">
+            <div className="flex items-center mb-8">
+              <h1 className="text-3xl font-bold text-dark-text">
+                {categoryName}
+              </h1>
+              <div className="ml-3 gold-accent-dot"></div>
+            </div>
+            <p className="text-medium-text mb-8">
+              Browse the latest articles in {categoryName}
+            </p>
 
-          <ArticleList
-            articles={categoryArticles}
-            useLinks={true}
-            cardType="glass"
-          />
-        </section>
-      </main>
+            <ArticleList
+              articles={categoryArticles}
+              useLinks={true}
+              cardType="glass"
+            />
+          </section>
+        </main>
+      </div>
     </>
   );
 }

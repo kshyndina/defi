@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ArticleDetail } from "@/components/news/ArticleDetail";
+import { Footer } from "@/components/news/Footer";
 import { SEO } from "@/components/seo/SEO";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { googleSheetsService } from "@/lib/google/sheets";
@@ -76,9 +77,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         structuredData={articleStructuredData}
       />
 
-      <main className="px-4 py-8">
-        <ArticleDetail article={article} />
-      </main>
+      <div className="min-h-screen text-foreground">
+        <main className="px-4 py-8">
+          <ArticleDetail article={article} />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
