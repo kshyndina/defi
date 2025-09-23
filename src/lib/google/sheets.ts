@@ -56,10 +56,52 @@ export class GoogleSheetsService {
 
       console.log('Fetching fresh articles from Google Sheets');
       
+      // First, get the sheet metadata to find the last row with data
+      const sheetMetadata = await this.sheets.spreadsheets.get({
+        spreadsheetId: this.spreadsheetId,
+        ranges: ['Crypto Articles for Dexcelerate'],
+        fields: 'sheets.data.rowData.values',
+      }, forceRefresh ? {
+        // Bypass cache when forceRefresh is true
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      } : {
+        // Add caching options for normal requests
+        headers: {
+          'Cache-Control': 's-maxage=86400, stale-while-revalidate',
+        },
+      });
+
+      // Find the last row with data (skip header row)
+      const sheetData = sheetMetadata.data.sheets?.[0]?.data?.[0]?.rowData || [];
+      let lastRowWithData = 1; // Start from row 2 (index 1) to skip header
+      
+      for (let i = 1; i < sheetData.length; i++) {
+        if (sheetData[i].values && sheetData[i].values.length > 0) {
+          // Check if the row has any non-empty values in columns A-G
+          const hasData = sheetData[i].values.slice(0, 7).some(cell =>
+            cell && cell.formattedValue && cell.formattedValue.trim() !== ''
+          );
+          
+          if (hasData) {
+            lastRowWithData = i;
+          }
+        }
+      }
+
+      // If we found data, fetch all rows from A2 to G[lastRowWithData + 1]
+      // If no data found, default to a reasonable range
+      const range = lastRowWithData > 1
+        ? `Crypto Articles for Dexcelerate!A2:G${lastRowWithData + 1}`
+        : 'Crypto Articles for Dexcelerate!A2:G2';
+      
       // Use Next.js fetch with caching for API calls
       const response = await this.sheets.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,
-        range: 'Crypto Articles for Dexcelerate!A2:G', // Skip header row, include up to column G for date
+        range,
       }, forceRefresh ? {
         // Bypass cache when forceRefresh is true
         headers: {
