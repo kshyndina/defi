@@ -7,12 +7,17 @@ interface ArticleSectionProps {
   articles: Article[];
 }
 
-// Helper function to limit articles to 2-4 cards
+// Helper function to limit articles to a configurable number of cards
 const limitArticles = (articles: Article[]): Article[] => {
-  // Ensure minimum of 2 cards and maximum of 4 cards
+  // Get the maximum number of articles from environment variable, default to 12
+  const maxArticles = process.env.MAX_ARTICLES_PER_SECTION
+    ? parseInt(process.env.MAX_ARTICLES_PER_SECTION, 10)
+    : 12;
+  
+  // Ensure minimum of 2 cards and maximum of the configured limit
   if (articles.length <= 2) return articles;
-  if (articles.length >= 4) return articles.slice(0, 4);
-  return articles.slice(0, Math.max(2, Math.min(4, articles.length)));
+  if (articles.length >= maxArticles) return articles.slice(0, maxArticles);
+  return articles.slice(0, Math.max(2, Math.min(maxArticles, articles.length)));
 };
 
 export function ArticleSection({ articles }: ArticleSectionProps) {
