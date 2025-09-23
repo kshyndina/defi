@@ -6,6 +6,7 @@ export async function GET() {
   
   try {
     const articles = await googleSheetsService.getAllArticles();
+    console.log(`Total articles fetched for sitemap: ${articles.length}`);
     const categories = await fetchCategories();
     
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +54,7 @@ export async function GET() {
     return `
   <url>
     <loc>${baseUrl}/articles/${slug}</loc>
-    <lastmod>${new Date(article.date).toISOString()}</lastmod>
+    <lastmod>${new Date(article.date || new Date()).toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <news:news>
@@ -61,7 +62,7 @@ export async function GET() {
         <news:name>DUF</news:name>
         <news:language>en</news:language>
       </news:publication>
-      <news:publication_date>${new Date(article.date).toISOString()}</news:publication_date>
+      <news:publication_date>${new Date(article.date || new Date()).toISOString()}</news:publication_date>
       <news:title>${article.title.replace(/&/g, '&amp;')}</news:title>
     </news:news>
     <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}/articles/${slug}" />

@@ -21,9 +21,13 @@ const limitArticles = (articles: Article[]): Article[] => {
 };
 
 export function ArticleSection({ articles }: ArticleSectionProps) {
-  // Limit articles to 2-4 cards for each section
+  // Get featured articles (first few articles)
   const featuredArticles = limitArticles(articles);
-  const latestArticles = limitArticles(articles);
+  
+  // Get latest articles, excluding those already in featured
+  const featuredIds = featuredArticles.map(article => article.id);
+  const remainingArticles = articles.filter(article => !featuredIds.includes(article.id));
+  const latestArticles = limitArticles(remainingArticles);
 
   return (
     <div className="space-y-20 px-4 md:px-8 lg:px-12 max-w-7xl mx-auto overflow-visible">
