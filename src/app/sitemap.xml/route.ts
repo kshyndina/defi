@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { googleSheetsService } from '@/lib/google/sheets';
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://degennews.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.com';
   
   try {
     const articles = await googleSheetsService.getAllArticles();
