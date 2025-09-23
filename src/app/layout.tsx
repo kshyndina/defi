@@ -58,29 +58,29 @@ export default function RootLayout({
         <SEO />
         <StructuredData type="website" data={{}} />
         {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon_defi.jpg" sizes="any" />
         <link
           rel="icon"
-          href="/favicon-32x32.png"
-          type="image/png"
+          href="/favicon_defi.jpg"
+          type="image/jpg"
           sizes="32x32"
         />
         <link
           rel="icon"
-          href="/favicon-16x16.png"
-          type="image/png"
+          href="/favicon_defi.jpg"
+          type="image/jpg"
           sizes="16x16"
         />
         <link
           rel="apple-touch-icon"
-          href="/apple-touch-icon.png"
+          href="/favicon_defi.jpg"
           sizes="180x180"
         />
         <link rel="manifest" href="/site.webmanifest" />
 
         {/* Android Chrome */}
-        <link rel="icon" href="/android-chrome-192x192.png" sizes="192x192" />
-        <link rel="icon" href="/android-chrome-512x512.png" sizes="512x512" />
+        <link rel="icon" href="/favicon_defi.jpg" sizes="192x192" />
+        <link rel="icon" href="/favicon_defi.jpg" sizes="512x512" />
 
         {/* Preload critical resources */}
 
@@ -98,7 +98,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//www.google.com" />
 
         {/* Preload key assets */}
-        <link rel="preload" href="/favicon.ico" as="image" />
+        <link rel="preload" href="/favicon_defi.jpg" as="image" />
         <link
           rel="preload"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"

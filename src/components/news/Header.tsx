@@ -67,7 +67,7 @@ export function Header() {
       <div className="liquid-mercury-nav">
         <Link href="/" className="liquid-mercury-logo flex items-center">
           <img
-            src="/defi-update_logo.jpg"
+            src="/defi_logo.png"
             alt="DeFi Update"
             className="w-10 h-10 md:w-12 md:h-12 rounded"
             loading="lazy"
@@ -138,7 +138,7 @@ export function Header() {
           <div className="flex items-center justify-between p-3 md:p-4 border-b border-gray-200 bg-white">
             <Link href="/" className="liquid-mercury-logo flex items-center" onClick={closeMenu}>
               <img
-                src="/defi-update_logo.jpg"
+                src="/defi_logo.png"
                 alt="DeFi Update"
                 className="w-10 h-10 md:w-12 md:h-12 rounded"
                 loading="lazy"
