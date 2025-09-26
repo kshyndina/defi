@@ -7,21 +7,25 @@ interface ArticleSectionProps {
   articles: Article[];
 }
 
-// Helper function to get featured articles (all articles)
+// Helper function to get featured articles (limit to first 6)
 const getFeaturedArticles = (articles: Article[]): Article[] => {
-  // Return all articles for featured section
-  return articles;
+  // Return only first 6 articles for featured section
+  return articles.slice(0, 6);
 };
 
 export function ArticleSection({ articles }: ArticleSectionProps) {
+  console.log(`ArticleSection received ${articles.length} articles total`);
+  
   // Get featured articles (first few articles)
   const featuredArticles = getFeaturedArticles(articles);
+  console.log(`Featured articles section: ${featuredArticles.length} articles`);
 
   // Get latest articles, excluding those already in featured
   const featuredIds = featuredArticles.map((article) => article.id);
   const latestArticles = articles.filter(
     (article) => !featuredIds.includes(article.id)
   );
+  console.log(`Latest articles section: ${latestArticles.length} articles`);
 
   return (
     <div className="space-y-20 px-4 md:px-8 lg:px-12 max-w-7xl mx-auto overflow-visible">

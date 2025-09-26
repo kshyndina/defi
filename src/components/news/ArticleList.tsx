@@ -44,7 +44,7 @@ export function ArticleList({ articles, onArticleClick, useLinks = false, cardTy
                 index={index}
                 isFeatured={featured}
                 onClick={() => onArticleClick?.(article)}
-                href={useLinks ? `/articles/${article.url.split('/').pop()}` : undefined}
+                href={useLinks ? `/articles/${article.url}` : undefined}
               />
             ) : (
               <ArticleCard
@@ -52,7 +52,7 @@ export function ArticleList({ articles, onArticleClick, useLinks = false, cardTy
                 index={index}
                 isFeatured={featured}
                 onClick={() => onArticleClick?.(article)}
-                href={useLinks ? `/articles/${article.url.split('/').pop()}` : undefined}
+                href={useLinks ? `/articles/${article.url}` : undefined}
               />
             )}
           </div>

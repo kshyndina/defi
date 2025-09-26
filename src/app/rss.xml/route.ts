@@ -6,7 +6,8 @@ export async function GET() {
   
   try {
     const articles = await googleSheetsService.getAllArticles();
-    const latestArticles = articles.slice(0, 20); // Latest 20 articles
+    // Include all articles in the RSS feed, not just a limited number
+    const latestArticles = articles;
     
     const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" 

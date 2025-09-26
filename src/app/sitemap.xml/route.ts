@@ -1,655 +1,81 @@
-`import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { googleSheetsService } from '@/lib/google/sheets';
 
 export async function GET() {
-  const baseUrl = 'https://www.defi-update.fun';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://degennews.com';
   
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  try {
+    // Fetch all articles dynamically, forcing a refresh to ensure we get the latest data
+    const articles = await googleSheetsService.getAllArticles(true);
+    console.log(`Sitemap generation: Fetched ${articles.length} articles`);
+    
+    // Get unique categories
+    const categories = [...new Set(articles.map(article => article.category))];
+    console.log(`Sitemap generation: Found ${categories.length} unique categories`);
+    
+    // Build sitemap XML
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<!--
-Created with Free Online Sitemap Generator www.countingcharacters.com/xml-sitemap-generator
--->
-<url>
-      <loc>${baseUrl}/</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/categories/technical-analysis-%26-trading-strategies</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/categories/trading-psychology-%26-risk-management</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/categories/risk-management-%26-portfolio-theory</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/cross-chain-arbitrage-exploiting-price-differences-multi-chain-memes</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/sentiment-based-position-sizing-meme-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/optimism-bias-meme-token-evaluation-psychology-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/slippage-mathematics-the-hidden-tax-that-bleeds-memecoin-profits-dry</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-death-cross-deception-why-traditional-indicators-betray-memecoin-traders</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/volatility-harvesting-meme-straddles</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/mev-predators-how-sandwich-attacks-devour-memecoin-traders-alive</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-round-number-prophecy-how-psychological-price-levels-become-self-fulfilling-market-oracles</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/24-7-trading-dilemma-managing-risk-markets-never-sleep</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-5-minute-graduation-window-life-or-death-in-pumpfuns-digital-colosseum</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/cross-chain-bridge-warfare-when-memecoin-bridges-become-billion-dollar-battlefields</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/hot-hand-fallacy-following-successful-crypto-traders</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/planning-fallacy-why-trading-plans-take-longer-than-expected</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-oracle-deception-how-price-feed-manipulation-turns-defi-protocols-into-wealth-extraction-machines</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/analysis-paralysis-too-much-information-hurts-trading-performance</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/5-minute-rule-ultra-short-timeframe-trading-pumpfun-graduates</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/telegram-trading-revolution-social-signals-memecoin-profits</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/liquidity-pool-health-spotting-rug-pulls-before-they-happen</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/dopamine-economy-memecoin-trading-hijacks-brain-reward-system</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/social-proof-crypto-telegram-communities-drive-100m-pumps</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-liquidity-pool-mirage-how-fake-depth-conceals-rug-pull-architecture</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/disposition-effect-holding-losers-too-long-selling-winners-too-early</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/dollar-cost-averaging-evolution-memes</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-bonding-curve-apocalypse-when-mathematics-meets-meme-madness</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/copy-trading-psychology-hidden-triggers-profitable-traders</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-staking-trap-how-defi-rewards-become-digital-quicksand-for-memecoin-holdings</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/liquidity-mirages-market-depth-illusions-trap-memecoin-traders</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/breakout-pullback-strategy-meme-momentum</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/event-driven-meme-strategy</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/whale-alert-the-hunt-for-smart-money-in-solanas-memecoin-wilderness</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/copy-trading-carnage-when-following-smart-money-becomes-financial-suicide</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/gamma-squeeze-play-meme-options</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-attention-economy-apocalypse-how-social-media-metrics-manipulate-memecoin-valuations</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-flash-loan-assassins-how-defis-greatest-innovation-becomes-memecoins-deadliest-weapon</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/fomo-vs-logic-automated-trading-systems-beat-human-emotion</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/trust-algorithm-smart-traders-identify-profitable-signal-providers</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/cognitive-load-management-high-speed-meme-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/technical-pattern-recognition-meme-charts</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-cult-of-diamond-hands-how-hodl-mythology-destroys-rational-portfolio-management</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/fomo-vs-fear-of-losing-balancing-competing-emotions-crypto-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/mean-reversion-strategies-overextended-memes</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/cross-exchange-arbitrage-meme-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/fomo-to-fortune-psychology-successful-memecoin-entry-timing</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/commitment-escalation-trap-doubling-down-losing-positions</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/overconfidence-bias-danger-early-beginners-luck-memecoin-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/bonding-curve-advantage-trading-pumpfun-tokens-pre-graduation</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/volume-spike-patterns-solana-memecoins-early-signals</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/the-psychological-minefield-how-cognitive-biases-detonate-memecoin-fortunes</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/multi-wallet-mastery-advanced-risk-compartmentalization-volatile-trading</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc></loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
-<url>
-      <loc>${baseUrl}/articles/probability-neglect-low-probability-high-impact-events</loc>
-      <lastmod>2025-09-23</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1</priority>
-</url>
+  <!-- Homepage -->
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>`;
+    
+    // Add category pages
+    categories.forEach(category => {
+      const categorySlug = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '%26');
+      sitemap += `
+  <url>
+    <loc>${baseUrl}/categories/${categorySlug}</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    });
+    
+    // Add all article pages
+    articles.forEach(article => {
+      sitemap += `
+  <url>
+    <loc>${baseUrl}/articles/${article.url}</loc>
+    <lastmod>${article.date || new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+    });
+    
+    sitemap += `
 </urlset>`;
 
-  return new NextResponse(sitemap, {
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 's-maxage=86400, stale-while-revalidate'
-    }
-  });
+    return new NextResponse(sitemap, {
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 's-maxage=86400, stale-while-revalidate'
+      }
+    });
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    
+    // Return a basic sitemap with just the homepage in case of error
+    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+    return new NextResponse(fallbackSitemap, {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 's-maxage=3600, stale-while-revalidate'
+      }
+    });
+  }
 }

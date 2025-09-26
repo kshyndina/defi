@@ -14,17 +14,10 @@ interface CategoryPageProps {
   }>;
 }
 
-// Helper function to limit articles to a configurable number of cards
-const limitArticles = (articles: any[]): any[] => {
-  // Get the maximum number of articles from environment variable, default to 12
-  const maxArticles = process.env.MAX_ARTICLES_PER_SECTION
-    ? parseInt(process.env.MAX_ARTICLES_PER_SECTION, 10)
-    : 12;
-  
-  // Ensure minimum of 2 cards and maximum of the configured limit
-  if (articles.length <= 2) return articles;
-  if (articles.length >= maxArticles) return articles.slice(0, maxArticles);
-  return articles.slice(0, Math.max(2, Math.min(maxArticles, articles.length)));
+// Helper function to return all articles without limiting them
+const getAllArticles = (articles: any[]): any[] => {
+  // Return all articles without any limitation
+  return articles;
 };
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
@@ -45,8 +38,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  // Limit articles to 2-4 cards
-  categoryArticles = limitArticles(categoryArticles);
+  // Return all articles without limitation
+  categoryArticles = getAllArticles(categoryArticles);
 
   // Generate structured data for category page
   const categoryStructuredData = {

@@ -6,7 +6,8 @@ export async function GET() {
   
   try {
     const articles = await googleSheetsService.getAllArticles();
-    const latestArticles = articles.slice(0, 50); // Latest 50 articles for LLMs
+    // Include all articles in the JSON feed, not just a limited number
+    const latestArticles = articles;
     
     const posts = latestArticles.map(article => {
       const slug = article.url.split('/').pop();

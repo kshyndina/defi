@@ -50,53 +50,60 @@ export class GoogleSheetsService {
       const cacheValid = !forceRefresh && this.cachedArticles.length > 0 && cacheAge < 86400000; // 24 hours
 
       if (cacheValid) {
-        console.log('Using cached articles data');
+        console.log(`Using cached articles data (${this.cachedArticles.length} articles)`);
         return this.cachedArticles;
       }
 
       console.log('Fetching fresh articles from Google Sheets');
       
-      // First, get the sheet metadata to find the last row with data
-      const sheetMetadata = await this.sheets.spreadsheets.get({
-        spreadsheetId: this.spreadsheetId,
-        ranges: ['Crypto Articles for Dexcelerate'],
-        fields: 'sheets.data.rowData.values',
-      }, forceRefresh ? {
-        // Bypass cache when forceRefresh is true
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-        },
-      } : {
-        // Add caching options for normal requests
-        headers: {
-          'Cache-Control': 's-maxage=86400, stale-while-revalidate',
-        },
-      });
-
-      // Find the last row with data (skip header row)
-      const sheetData = sheetMetadata.data.sheets?.[0]?.data?.[0]?.rowData || [];
+      // First, try to get the sheet metadata to find the last row with data
       let lastRowWithData = 1; // Start from row 2 (index 1) to skip header
       
-      for (let i = 1; i < sheetData.length; i++) {
-        if (sheetData[i].values && sheetData[i].values.length > 0) {
-          // Check if the row has any non-empty values in columns A-G
-          const hasData = sheetData[i].values.slice(0, 7).some(cell =>
-            cell && cell.formattedValue && cell.formattedValue.trim() !== ''
-          );
-          
-          if (hasData) {
-            lastRowWithData = i;
+      try {
+        const sheetMetadata = await this.sheets.spreadsheets.get({
+          spreadsheetId: this.spreadsheetId,
+          ranges: ['Crypto Articles for Dexcelerate'],
+          fields: 'sheets.data.rowData.values',
+        }, forceRefresh ? {
+          // Bypass cache when forceRefresh is true
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        } : {
+          // Add caching options for normal requests
+          headers: {
+            'Cache-Control': 's-maxage=86400, stale-while-revalidate',
+          },
+        });
+
+        // Find the last row with data (skip header row)
+        const sheetData = sheetMetadata.data.sheets?.[0]?.data?.[0]?.rowData || [];
+        
+        for (let i = 1; i < sheetData.length; i++) {
+          if (sheetData[i].values && sheetData[i].values.length > 0) {
+            // Check if the row has any non-empty values in columns A-G
+            const hasData = sheetData[i].values.slice(0, 7).some(cell =>
+              cell && cell.formattedValue && cell.formattedValue.trim() !== ''
+            );
+            
+            if (hasData) {
+              lastRowWithData = i;
+            }
           }
         }
+      } catch (metadataError) {
+        console.warn('Error fetching sheet metadata, using fallback approach:', metadataError);
+        // If metadata fetch fails, use a large range to ensure we get all data
+        lastRowWithData = 1000; // Fallback to a large number
       }
 
       // If we found data, fetch all rows from A2 to G[lastRowWithData + 1]
-      // If no data found, default to a reasonable range
+      // If no data found or metadata fetch failed, use a large range
       const range = lastRowWithData > 1
-        ? `Crypto Articles for Dexcelerate!A2:G${lastRowWithData + 1}`
-        : 'Crypto Articles for Dexcelerate!A2:G2';
+        ? `Crypto Articles for Dexcelerate!A2:G${Math.max(lastRowWithData + 1, 1000)}`
+        : 'Crypto Articles for Dexcelerate!A2:G1000'; // Use a large range as fallback
       
       // Use Next.js fetch with caching for API calls
       const response = await this.sheets.spreadsheets.values.get({
@@ -117,9 +124,11 @@ export class GoogleSheetsService {
       });
 
       const rows = response.data.values || [];
+      console.log(`Found ${rows.length} total rows in Google Sheets`);
       
       // Skip header row if it contains CSV headers
       const dataRows = rows.length > 0 && rows[0][1] === 'Article Name' ? rows.slice(1) : rows;
+      console.log(`Processing ${dataRows.length} data rows (excluding header)`);
       
       const articles = await Promise.all(dataRows.map(async (row: string[], index: number) => {
         const title = row[1] || '';
@@ -143,6 +152,7 @@ export class GoogleSheetsService {
       
       // Sort articles by date (newest first)
       this.cachedArticles = articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      console.log(`Processed and cached ${this.cachedArticles.length} articles`);
       this.lastFetchTime = now;
       
       return this.cachedArticles;

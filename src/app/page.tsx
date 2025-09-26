@@ -10,6 +10,7 @@ export const revalidate = 86400;
 export default async function Home() {
   // Fetch articles with caching
   const articles = await googleSheetsService.getAllArticles();
+  console.log(`Homepage received ${articles.length} articles from Google Sheets service`);
 
   // Generate structured data for homepage
   const homepageStructuredData = {
