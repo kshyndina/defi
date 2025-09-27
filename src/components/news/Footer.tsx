@@ -77,7 +77,6 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center text-sm text-gray-500">
           <p>© 2025 DUF. All rights reserved.</p>
-          <p className="mt-2">DUF is not responsible for the content of external sites.</p>
           
           <div className="mt-4">
             <Dialog open={isOpen} onOpenChange={setIsOpen}>

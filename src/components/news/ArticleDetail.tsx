@@ -161,13 +161,6 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
           </dl>
         </section>
 
-        <footer className="mt-16 pt-8 border-t border-gold-accent/20">
-          <div className="text-center text-sm text-medium-text">
-            <p>
-              DUF is not responsible for the content of external sites.
-            </p>
-          </div>
-        </footer>
       </article>
     </>
   );
