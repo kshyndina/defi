@@ -69,10 +69,10 @@ export function Header() {
           <img
             src="/defi_logo.png"
             alt="DeFi Update"
-            className="w-10 h-10 md:w-12 md:h-12 rounded"
+            className="w-10 h-auto md:w-12 rounded"
             loading="lazy"
             width="40"
-            height="40"
+            style={{ height: 'auto' }}
           />
         </Link>
 
@@ -140,10 +140,10 @@ export function Header() {
               <img
                 src="/defi_logo.png"
                 alt="DeFi Update"
-                className="w-10 h-10 md:w-12 md:h-12 rounded"
+                className="w-10 h-auto md:w-12 rounded"
                 loading="lazy"
                 width="40"
-                height="40"
+                style={{ height: 'auto' }}
               />
             </Link>
             <button

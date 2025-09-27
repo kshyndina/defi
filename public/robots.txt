@@ -34,8 +34,8 @@ Disallow: /admin/
 Disallow: /private/
 
 # Sitemaps
-Sitemap: https://degennews.com/sitemap.xml
-Sitemap: https://degennews.com/rss.xml
+Sitemap: https://www.defi-update.fun/sitemap.xml
+Sitemap: https://www.defi-update.fun/rss.xml
 
 # Crawl delay (optional)
 Crawl-delay: 1

@@ -62,27 +62,35 @@ export default function RootLayout({
         <link
           rel="icon"
           href="/favicon_defi.jpg"
-          type="image/jpg"
+          type="image/jpeg"
           sizes="32x32"
         />
         <link
           rel="icon"
           href="/favicon_defi.jpg"
-          type="image/jpg"
+          type="image/jpeg"
           sizes="16x16"
         />
         <link
           rel="apple-touch-icon"
-          href="/favicon_defi.jpg"
+          href="/apple-touch-icon.png"
           sizes="180x180"
         />
         <link rel="manifest" href="/site.webmanifest" />
 
         {/* Android Chrome */}
-        <link rel="icon" href="/favicon_defi.jpg" sizes="192x192" />
-        <link rel="icon" href="/favicon_defi.jpg" sizes="512x512" />
+        <link rel="icon" href="/android-chrome-192x192.png" sizes="192x192" />
+        <link rel="icon" href="/android-chrome-512x512.png" sizes="512x512" />
 
-        {/* Preload critical resources */}
+        {/* Additional favicon sizes for better compatibility */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" href="/favicon-48x48.png" sizes="48x48" />
+        <link rel="icon" href="/favicon-64x64.png" sizes="64x64" />
+        <link rel="icon" href="/favicon-128x128.png" sizes="128x128" />
+        <link rel="icon" href="/favicon-192x192.png" sizes="192x192" />
+        <link rel="icon" href="/favicon-256x256.png" sizes="256x256" />
 
         {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
