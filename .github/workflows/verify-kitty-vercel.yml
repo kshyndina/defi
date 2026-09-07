@@ -1,0 +1,57 @@
+name: verify-kitty-vercel
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-kitty-vercel.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify homepage
+        run: |
+          set -euo pipefail
+          URL="https://hello-kitty-opendex-live-kshyndinas-projects.vercel.app"
+          code=$(curl -L -sS -o /tmp/page.html -w "%{http_code}" "$URL/")
+          echo "homepage_status=$code"
+          test "$code" = "200"
+          grep -q "Hello Kitty" /tmp/page.html
+          grep -q "OpenDEX" /tmp/page.html
+
+      - name: Verify scanner API and real token data
+        run: |
+          set -euo pipefail
+          URL="https://hello-kitty-opendex-live-kshyndinas-projects.vercel.app"
+          body='{"sources":{"new":{},"trending":{},"topVolume":{},"topGainers":{}}}'
+          code=$(curl -L -sS -o /tmp/api.json -w "%{http_code}"             -X POST "$URL/api/scanner"             -H 'content-type: application/json'             -H 'accept: application/json'             --data "$body")
+          echo "api_status=$code"
+          echo "api_preview=$(head -c 500 /tmp/api.json | tr '\n' ' ')"
+          test "$code" = "200"
+          python - <<'PY'
+          import json
+          p='/tmp/api.json'
+          with open(p) as f:
+              data=json.load(f)
+          views=['new','trending','topVolume','topGainers']
+          assert any(k in data for k in views), f"missing scanner views: {list(data)[:20]}"
+          total=0
+          non_null=0
+          for k in views:
+              src=data.get(k)
+              if src is None:
+                  continue
+              non_null += 1
+              if isinstance(src, list):
+                  total += len(src)
+              elif isinstance(src, dict):
+                  for key in ('tokens','items','results','data'):
+                      if isinstance(src.get(key), list):
+                          total += len(src[key])
+                          break
+          print(f"non_null_views={non_null}")
+          print(f"token_count={total}")
+          print("source_failures=", data.get('meta',{}).get('sourceFailures'))
+          assert non_null > 0, "all scanner views are null"
+          assert total > 0, "scanner returned no token rows"
+          PY
