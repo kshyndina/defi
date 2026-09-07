@@ -9,10 +9,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify public Vercel test
+      - name: Verify short production alias
         run: |
           set -euo pipefail
-          URL="https://kitty-public-test-ngkuqqbnj-kshyndinas-projects.vercel.app/"
+          URL="https://kitty-public-test-kshyndinas-projects.vercel.app/"
           code=$(curl -L -sS -o /tmp/page.html -w "%{http_code}" "$URL")
           echo "status=$code"
           echo "preview=$(head -c 250 /tmp/page.html | tr '\n' ' ')"
