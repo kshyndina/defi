@@ -99,7 +99,7 @@ const VIEW_META: Record<ViewKey, { label: string; eyebrow: string }> = {
   topGainers: { label: 'Gainers', eyebrow: 'up only-ish' },
 };
 
-const TF_KEY: Record<TimeFrame, keyof NonNullable<ScannerItem['stats']>['timeframes']> = {
+const TF_KEY: Record<TimeFrame, '5m' | '1h' | '6h' | '24h'> = {
   '5M': '5m',
   '1H': '1h',
   '6H': '6h',
@@ -290,7 +290,7 @@ export default function HelloKittyScannerPage() {
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [timeFrame, minLiquidity, maxAgeHours]);
+  }, [loadScanner]);
 
   useEffect(() => {
     if (!autoRefresh) return;
@@ -319,7 +319,7 @@ export default function HelloKittyScannerPage() {
   }, [activeList, query]);
 
   const failureCount = Object.keys(data?.meta?.sourceFailures ?? {}).length;
-  const isInitialLoading = loading && !data;
+  const isInitialLoading = refreshing && !data && !error;
 
   return (
     <main className={styles.page}>
