@@ -27,6 +27,26 @@ type ScannerItem = {
   createdAtAgeSeconds?: number;
   createdAtTimestampStr?: string;
   rugged?: boolean;
+  image?: string | null;
+  imageUrl?: string | null;
+  imageUri?: string | null;
+  imageURI?: string | null;
+  tokenImage?: string | null;
+  tokenImageUrl?: string | null;
+  tokenLogo?: string | null;
+  tokenLogoUrl?: string | null;
+  logo?: string | null;
+  logoUrl?: string | null;
+  logoURI?: string | null;
+  icon?: string | null;
+  metadata?: {
+    image?: string | null;
+    imageUrl?: string | null;
+    imageUri?: string | null;
+    logo?: string | null;
+    logoUrl?: string | null;
+    icon?: string | null;
+  };
   quote?: {
     priceUsd?: number;
     marketCapUsd?: number;
@@ -218,6 +238,75 @@ function getWindow(token: ScannerItem, timeFrame: TimeFrame) {
   return token.stats?.timeframes?.[TF_KEY[timeFrame]] ?? token.stats?.timeframes?.['24h'];
 }
 
+function normalizeTokenImage(value?: string | null) {
+  if (!value) return null;
+  const image = value.trim();
+  if (!image) return null;
+  if (image.startsWith('ipfs://')) {
+    return 'https://ipfs.io/ipfs/' + image.slice('ipfs://'.length).replace(/^ipfs\//, '');
+  }
+  if (image.startsWith('//')) return 'https:' + image;
+  if (/^https?:\/\//i.test(image)) return image;
+  return null;
+}
+
+function getTokenImage(token: ScannerItem) {
+  const candidates = [
+    token.imageUrl,
+    token.image,
+    token.imageUri,
+    token.imageURI,
+    token.tokenImageUrl,
+    token.tokenImage,
+    token.tokenLogoUrl,
+    token.tokenLogo,
+    token.logoUrl,
+    token.logoURI,
+    token.logo,
+    token.icon,
+    token.metadata?.imageUrl,
+    token.metadata?.image,
+    token.metadata?.imageUri,
+    token.metadata?.logoUrl,
+    token.metadata?.logo,
+    token.metadata?.icon,
+  ];
+
+  for (const candidate of candidates) {
+    const normalized = normalizeTokenImage(candidate);
+    if (normalized) return normalized;
+  }
+  return null;
+}
+
+function TokenAvatar({ token }: { token: ScannerItem }) {
+  const image = getTokenImage(token);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [image]);
+
+  const fallback = (token.tokenSymbol || token.tokenName || '?').slice(0, 2).toUpperCase();
+
+  return (
+    <div className={styles.tokenAvatar}>
+      {image && !imageFailed ? (
+        <img
+          src={image}
+          alt={(token.tokenSymbol || token.tokenName || 'Token') + ' thumbnail'}
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setImageFailed(true)}
+        />
+      ) : (
+        <span>{fallback}</span>
+      )}
+    </div>
+  );
+}
+
 function SocialLinks({ token }: { token: ScannerItem }) {
   const items = [
     { href: token.socials?.twitter, label: 'X' },
@@ -253,8 +342,7 @@ export default function HelloKittyScannerPage() {
 
   const loadScanner = useCallback(async (signal?: AbortSignal) => {
     setError(null);
-    if (data) setRefreshing(true);
-    else setLoading(true);
+    setRefreshing(true);
 
     try {
       const response = await fetch('/api/opendex/scanner', {
@@ -280,7 +368,7 @@ export default function HelloKittyScannerPage() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [data, maxAgeHours, minLiquidity, timeFrame]);
+  }, [maxAgeHours, minLiquidity, timeFrame]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -319,7 +407,7 @@ export default function HelloKittyScannerPage() {
   }, [activeList, query]);
 
   const failureCount = Object.keys(data?.meta?.sourceFailures ?? {}).length;
-  const isInitialLoading = refreshing && !data && !error;
+  const isInitialLoading = loading && !data && !error;
 
   return (
     <main className={styles.page}>
@@ -523,9 +611,7 @@ export default function HelloKittyScannerPage() {
               return (
                 <article className={styles.tokenRow} key={(token.chain ?? '') + token.tokenAddress}>
                   <div className={styles.tokenIdentity}>
-                    <div className={styles.tokenAvatar}>
-                      {(token.tokenSymbol || token.tokenName || '?').slice(0, 2).toUpperCase()}
-                    </div>
+                    <TokenAvatar token={token} />
                     <div>
                       <div className={styles.tokenNameLine}>
                         <strong>{token.tokenSymbol || '???'}</strong>
