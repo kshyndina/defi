@@ -35,10 +35,34 @@ type ScannerItem = {
   tokenImageUrl?: string | null;
   tokenLogo?: string | null;
   tokenLogoUrl?: string | null;
+  tokenLogoUri?: string | null;
+  tokenLogoURI?: string | null;
   logo?: string | null;
   logoUrl?: string | null;
+  logoUri?: string | null;
   logoURI?: string | null;
+  thumbnail?: string | null;
+  thumbnailUrl?: string | null;
   icon?: string | null;
+  token?: {
+    image?: string | null;
+    imageUrl?: string | null;
+    logo?: string | null;
+    logoUrl?: string | null;
+    logoURI?: string | null;
+    icon?: string | null;
+  };
+  profile?: {
+    image?: string | null;
+    imageUrl?: string | null;
+    icon?: string | null;
+  };
+  media?: {
+    image?: string | null;
+    imageUrl?: string | null;
+    thumbnail?: string | null;
+    thumbnailUrl?: string | null;
+  };
   metadata?: {
     image?: string | null;
     imageUrl?: string | null;
@@ -259,11 +283,29 @@ function getTokenImage(token: ScannerItem) {
     token.tokenImageUrl,
     token.tokenImage,
     token.tokenLogoUrl,
+    token.tokenLogoUri,
+    token.tokenLogoURI,
     token.tokenLogo,
     token.logoUrl,
+    token.logoUri,
     token.logoURI,
     token.logo,
+    token.thumbnailUrl,
+    token.thumbnail,
     token.icon,
+    token.token?.imageUrl,
+    token.token?.image,
+    token.token?.logoUrl,
+    token.token?.logoURI,
+    token.token?.logo,
+    token.token?.icon,
+    token.profile?.imageUrl,
+    token.profile?.image,
+    token.profile?.icon,
+    token.media?.imageUrl,
+    token.media?.image,
+    token.media?.thumbnailUrl,
+    token.media?.thumbnail,
     token.metadata?.imageUrl,
     token.metadata?.image,
     token.metadata?.imageUri,
