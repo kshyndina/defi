@@ -739,7 +739,7 @@
 }
 
 .statePanel span {
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .loaderBow {
@@ -849,7 +849,7 @@
     left: 0;
     top: 0;
     color: #a27d90;
-    font-size: 11px;
+    font-size: 13px;
     line-height: 1;
     font-weight: 900;
     text-transform: uppercase;
@@ -878,6 +878,23 @@
   .tokenMeta,
   .tokenMeta button {
     font-size: 13px;
+  }
+
+  .selectWrap > span {
+    font-size: 13px;
+  }
+
+  .socials a,
+  .risk_good,
+  .risk_mixed,
+  .risk_warn,
+  .risk_danger {
+    font-size: 12px;
+  }
+
+  .socials a {
+    padding: 4px 6px;
+    border-radius: 7px;
   }
 }
 
