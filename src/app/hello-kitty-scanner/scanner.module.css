@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Nunito:wght@500;600;700;800;900&display=swap');
+
 .page {
   min-height: 100vh;
   background:
@@ -7,7 +9,9 @@
   padding: 24px;
   position: relative;
   overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  --font-kawaii: 'Mochiy Pop One', 'Arial Rounded MT Bold', sans-serif;
 }
 
 .page * {
@@ -64,7 +68,7 @@
   backdrop-filter: blur(20px);
   border-radius: 999px;
   padding: 10px 14px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -107,17 +111,18 @@
 .kicker {
   margin: 0 0 12px;
   color: #d84f84;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(46px, 6vw, 88px);
-  line-height: 0.88;
-  letter-spacing: -0.07em;
+  font-family: var(--font-kawaii);
+  font-size: clamp(44px, 5.4vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   font-weight: 900;
   color: #3b2631;
 }
@@ -126,8 +131,8 @@
   max-width: 720px;
   margin: 22px 0 0;
   color: #806273;
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .kittyCard {
@@ -244,9 +249,10 @@
   right: 18px;
   text-align: center;
   color: white;
-  font-size: 11px;
+  font-family: var(--font-kawaii);
+  font-size: 13px;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -269,7 +275,7 @@
 .metricCard span {
   display: block;
   color: #9a7688;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -277,8 +283,8 @@
 }
 
 .metricCard strong {
-  font-size: 28px;
-  letter-spacing: -0.04em;
+  font-size: 32px;
+  letter-spacing: -0.035em;
 }
 
 .metricDanger {
@@ -327,15 +333,16 @@
 .tab span,
 .activeTab span {
   display: block;
-  font-size: 15px;
+  font-family: var(--font-kawaii);
+  font-size: 17px;
   font-weight: 900;
 }
 
 .tab small,
 .activeTab small {
   display: block;
-  font-size: 10px;
-  margin-top: 4px;
+  font-size: 13px;
+  margin-top: 5px;
   opacity: 0.72;
 }
 
@@ -349,7 +356,7 @@
 
 .searchBox,
 .selectWrap {
-  min-height: 46px;
+  min-height: 54px;
   border: 1px solid rgba(122, 77, 97, 0.13);
   border-radius: 15px;
   background: #fffafd;
@@ -373,7 +380,7 @@
   outline: 0;
   background: transparent;
   color: #3d2632;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .searchBox input::placeholder {
@@ -386,7 +393,7 @@
 }
 
 .selectWrap > span {
-  font-size: 9px;
+  font-size: 12px;
   color: #ad8497;
   font-weight: 900;
   text-transform: uppercase;
@@ -400,8 +407,8 @@
   outline: 0;
   background: transparent;
   color: #513947;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .autoButton,
@@ -411,10 +418,10 @@
   border-radius: 15px;
   background: white;
   padding: 0 14px;
-  min-height: 46px;
+  min-height: 54px;
   cursor: pointer;
   color: #684a5a;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 900;
   white-space: nowrap;
 }
@@ -449,7 +456,7 @@
   justify-content: space-between;
   gap: 14px;
   color: #9f7b8d;
-  font-size: 10px;
+  font-size: 13px;
   border-bottom: 1px solid rgba(135, 69, 97, 0.08);
 }
 
@@ -479,7 +486,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .errorBanner {
@@ -505,7 +512,7 @@
   color: white;
   border-radius: 999px;
   padding: 7px 10px;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 900;
   cursor: pointer;
 }
@@ -522,7 +529,7 @@
 
 .tableHeader,
 .tokenRow {
-  min-width: 1170px;
+  min-width: 1360px;
   display: grid;
   grid-template-columns: 2.5fr 1fr 0.85fr 0.95fr 0.95fr 0.95fr 1fr 0.85fr 0.85fr 0.55fr;
   gap: 10px;
@@ -532,7 +539,7 @@
 .tableHeader {
   padding: 11px 16px;
   color: #a27d90;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -541,7 +548,7 @@
 }
 
 .tokenRow {
-  padding: 13px 16px;
+  padding: 16px 16px;
   border-bottom: 1px solid rgba(135, 69, 97, 0.07);
   transition: background 140ms ease, transform 140ms ease;
 }
@@ -558,17 +565,32 @@
 }
 
 .tokenAvatar {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
   display: grid;
   place-items: center;
-  border-radius: 13px;
+  border-radius: 16px;
   background: linear-gradient(145deg, #ffe1ed, #ffc4da);
   color: #b53d6c;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 900;
   border: 1px solid rgba(201, 70, 119, 0.12);
+  overflow: hidden;
+}
+
+.tokenAvatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.tokenAvatar span {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
 }
 
 .tokenIdentity > div:last-child {
@@ -583,12 +605,12 @@
 }
 
 .tokenNameLine strong {
-  font-size: 13px;
+  font-size: 16px;
   color: #3f2b35;
 }
 
 .tokenNameLine span {
-  font-size: 10px;
+  font-size: 13px;
   color: #9b798a;
   white-space: nowrap;
   overflow: hidden;
@@ -602,7 +624,7 @@
   gap: 6px;
   min-width: 0;
   color: #b08b9d;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .tokenMeta button {
@@ -610,7 +632,7 @@
   padding: 0;
   background: transparent;
   color: #9a7285;
-  font-size: 9px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -626,13 +648,13 @@
   border-radius: 5px;
   padding: 2px 4px;
   text-decoration: none;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
 }
 
 .muted {
   color: #c7a9b7;
-  font-size: 8px;
+  font-size: 14px;
 }
 
 .cell {
@@ -642,7 +664,7 @@
 .cell strong {
   display: block;
   color: #4a3340;
-  font-size: 11px;
+  font-size: 14px;
   white-space: nowrap;
 }
 
@@ -650,7 +672,7 @@
   display: block;
   margin-top: 4px;
   color: #aa8798;
-  font-size: 8.5px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -674,7 +696,7 @@
   display: inline-flex;
   border-radius: 999px;
   padding: 5px 7px;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -713,7 +735,7 @@
 
 .statePanel strong {
   color: #513846;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .statePanel span {
@@ -737,7 +759,7 @@
   gap: 12px;
   padding: 18px 4px 8px;
   color: #977286;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .footer span + span::before,
@@ -755,19 +777,107 @@
 }
 
 @media (max-width: 1100px) {
-  .controls {
-    grid-template-columns: 1.5fr repeat(3, 1fr);
+  .hero {
+    grid-template-columns: 1fr 250px;
+    padding: 34px;
   }
 
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .searchBox {
+    grid-column: 1 / -1;
+  }
+
+  .selectWrap,
+  .searchBox,
   .autoButton,
   .autoButtonActive,
   .refreshButton {
-    min-height: 40px;
+    min-height: 56px;
   }
 
-  .hero {
-    grid-template-columns: 1fr 280px;
-    padding: 34px;
+  .tabs {
+    gap: 10px;
+  }
+
+  .tab,
+  .activeTab {
+    min-height: 62px;
+    padding: 14px 16px;
+  }
+
+  .tableWrap {
+    overflow-x: visible;
+    padding: 12px;
+    background: #fffafd;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+
+  .tokenRow {
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(135, 69, 97, 0.1);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.94);
+    box-shadow: 0 8px 22px rgba(157, 66, 101, 0.06);
+  }
+
+  .tokenIdentity {
+    grid-column: 1 / -1;
+    padding-bottom: 4px;
+  }
+
+  .cell {
+    position: relative;
+    padding-top: 19px;
+    min-height: 52px;
+  }
+
+  .cell::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #a27d90;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .cell strong {
+    font-size: 16px;
+  }
+
+  .cell small {
+    font-size: 13px;
+  }
+
+  .tokenAvatar {
+    width: 60px;
+    height: 60px;
+    flex-basis: 60px;
+  }
+
+  .tokenNameLine strong {
+    font-size: 18px;
+  }
+
+  .tokenNameLine span,
+  .tokenMeta,
+  .tokenMeta button {
+    font-size: 13px;
   }
 }
 
@@ -803,6 +913,18 @@
     grid-column: 1 / -1;
   }
 
+  .tokenRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell strong {
+    font-size: 17px;
+  }
+
+  .statusRow {
+    font-size: 14px;
+  }
+
   .footer {
     flex-wrap: wrap;
   }
@@ -824,8 +946,8 @@
 
   .brand,
   .backendBadge {
-    font-size: 9px;
-    padding: 8px 10px;
+    font-size: 12px;
+    padding: 9px 11px;
   }
 
   .hero h1 {
@@ -833,7 +955,7 @@
   }
 
   .subtitle {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .metrics {
@@ -862,7 +984,7 @@
   .autoButton,
   .autoButtonActive,
   .refreshButton {
-    min-height: 43px;
+    min-height: 52px;
   }
 
   .statusRow {
