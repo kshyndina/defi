@@ -40,8 +40,8 @@ function WordPopover({ selection, onClose }) {
     <div className="word-popover" style={{left, top}} dir="ltr">
       <div className="popover-word" dir="rtl">{selection.word}</div>
       <div className="popover-actions">
-        <button onClick={()=>run('wordTransliteration')} disabled={!!loading}>{loading==='wordTransliteration'?'…':'Transliteration'}</button>
-        <button onClick={()=>run('wordTranslation')} disabled={!!loading}>{loading==='wordTranslation'?'…':'Translation'}</button>
+        <button onClick={()=>run('wordTransliteration')} disabled={!!loading}>{loading==='wordTransliteration'?'…':'תַּעְתִּיק'}</button>
+        <button onClick={()=>run('wordTranslation')} disabled={!!loading}>{loading==='wordTranslation'?'…':'תַּרְגּוּם'}</button>
       </div>
       {result && <div className="popover-result">{result}</div>}
     </div>
@@ -71,8 +71,8 @@ function Paragraph({ text, fontScale, fontFamily, onWord }) {
   return <article className="paragraph" ref={ref} style={{'--reader-scale':fontScale,'--reader-font':fontFamily}}>
     <p className="hebrew-text">{parts.map((p,i)=>IS_HEBREW_WORD.test(p)?<button key={i} className="word" onClick={e=>onWord({word:p,context:text,x:e.clientX,y:e.clientY})}>{p}</button>:<span key={i}>{p}</span>)}</p>
     <div className="paragraph-tools" dir="ltr">
-      <button onClick={()=>run('paragraphTransliteration')}>Aa&nbsp; {assist.loading&&assist.mode==='paragraphTransliteration'?'…':'Transliteration'}</button>
-      <button onClick={()=>run('paragraphTranslation')}>文&nbsp; {assist.loading&&assist.mode==='paragraphTranslation'?'…':'Translation'}</button>
+      <button onClick={()=>run('paragraphTransliteration')}>Aa&nbsp; {assist.loading&&assist.mode==='paragraphTransliteration'?'…':'תַּעְתִּיק'}</button>
+      <button onClick={()=>run('paragraphTranslation')}>文&nbsp; {assist.loading&&assist.mode==='paragraphTranslation'?'…':'תַּרְגּוּם'}</button>
     </div>
     {assist.text && <div className={`assist ${assist.mode==='paragraphTranslation'?'translation':''}`} dir="ltr">{assist.text}</div>}
   </article>
