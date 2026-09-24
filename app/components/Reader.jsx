@@ -48,7 +48,7 @@ function WordPopover({ selection, onClose }) {
   </>;
 }
 
-function Paragraph({ text, fontScale, onWord }) {
+function Paragraph({ text, fontScale, fontFamily, onWord }) {
   const ref=useRef(null);
   const [display,setDisplay]=useState(text);
   const [assist,setAssist]=useState({mode:null,text:'',loading:false});
@@ -68,7 +68,7 @@ function Paragraph({ text, fontScale, onWord }) {
     try { setAssist({mode,text:await language(mode,text),loading:false}); }
     catch { setAssist({mode,text:'Couldn’t load this right now.',loading:false}); }
   };
-  return <article className="paragraph" ref={ref} style={{'--reader-scale':fontScale}}>
+  return <article className="paragraph" ref={ref} style={{'--reader-scale':fontScale,'--reader-font':fontFamily}}>
     <p className="hebrew-text">{parts.map((p,i)=>IS_HEBREW_WORD.test(p)?<button key={i} className="word" onClick={e=>onWord({word:p,context:text,x:e.clientX,y:e.clientY})}>{p}</button>:<span key={i}>{p}</span>)}</p>
     <div className="paragraph-tools" dir="ltr">
       <button onClick={()=>run('paragraphTransliteration')}>Aa&nbsp; {assist.loading&&assist.mode==='paragraphTransliteration'?'…':'Transliteration'}</button>
@@ -83,23 +83,46 @@ export default function Reader({ book }) {
   const [selection,setSelection]=useState(null);
   const [sidebar,setSidebar]=useState(false);
   const [fontScale,setFontScale]=useState(1);
+  const [fontFamily,setFontFamily]=useState("var(--font-book)");
   const [dark,setDark]=useState(false);
   const chapter=book.chapters[chapterIndex];
   useEffect(()=>{
     const saved=Number(localStorage.getItem('hebrew-reader:chapter'));
     if(Number.isInteger(saved)&&saved>=0&&saved<book.chapters.length) setChapterIndex(saved);
     setDark(localStorage.getItem('hebrew-reader:dark')==='1');
+    const savedScale=Number(localStorage.getItem('hebrew-reader:fontScale'));
+    if(savedScale>=.8&&savedScale<=1.4) setFontScale(savedScale);
+    const savedFont=localStorage.getItem('hebrew-reader:fontFamily');
+    if(savedFont) setFontFamily(savedFont);
   },[book.chapters.length]);
   useEffect(()=>{ localStorage.setItem('hebrew-reader:chapter',String(chapterIndex)); window.scrollTo({top:0,behavior:'smooth'}); setSelection(null); },[chapterIndex]);
   useEffect(()=>{ document.documentElement.dataset.theme=dark?'dark':'light'; localStorage.setItem('hebrew-reader:dark',dark?'1':'0'); },[dark]);
+  useEffect(()=>{ localStorage.setItem('hebrew-reader:fontScale',String(fontScale)); },[fontScale]);
+  useEffect(()=>{ localStorage.setItem('hebrew-reader:fontFamily',fontFamily); },[fontFamily]);
   const progress=Math.round(((chapterIndex+1)/book.chapters.length)*100);
   return <main className="reader-shell">
     <header className="topbar" dir="ltr">
       <button className="icon-btn mobile-only" onClick={()=>setSidebar(true)} aria-label="Chapters">☰</button>
       <div className="book-id"><strong dir="rtl">{book.title}</strong><span>{book.author}</span></div>
       <div className="reader-controls">
-        <button onClick={()=>setFontScale(v=>Math.max(.84,v-.08))} aria-label="Smaller text">A−</button>
-        <button onClick={()=>setFontScale(v=>Math.min(1.28,v+.08))} aria-label="Larger text">A+</button>
+        <span className="niqqud-badge" title="Full niqqud is on">נִקּוּד ✓</span>
+        <label className="control-select">
+          <span>Size</span>
+          <select value={fontScale} onChange={e=>setFontScale(Number(e.target.value))} aria-label="Text size">
+            <option value=".88">S</option>
+            <option value="1">M</option>
+            <option value="1.12">L</option>
+            <option value="1.26">XL</option>
+          </select>
+        </label>
+        <label className="control-select">
+          <span>Font</span>
+          <select value={fontFamily} onChange={e=>setFontFamily(e.target.value)} aria-label="Reading font">
+            <option value="var(--font-book)">Book</option>
+            <option value="var(--font-clean)">Clean</option>
+            <option value="var(--font-classic)">Classic</option>
+          </select>
+        </label>
         <button onClick={()=>setDark(v=>!v)} aria-label="Theme">{dark?'☀︎':'☾'}</button>
       </div>
     </header>
@@ -114,7 +137,7 @@ export default function Reader({ book }) {
       <h1>{chapter.title}</h1>
       {chapter.partSubtitle && chapter.part && chapter.number!==1 && <div className="part-subtitle">{chapter.partSubtitle}</div>}
       <div className="rule"/>
-      {chapter.paragraphs.map((p,i)=><Paragraph key={`${chapter.slug}-${i}`} text={p} fontScale={fontScale} onWord={setSelection}/>)}
+      {chapter.paragraphs.map((p,i)=><Paragraph key={`${chapter.slug}-${i}`} text={p} fontScale={fontScale} fontFamily={fontFamily} onWord={setSelection}/>)}
       <footer className="chapter-nav" dir="ltr">
         <button disabled={chapterIndex===0} onClick={()=>setChapterIndex(i=>i-1)}>← Previous</button>
         <span>{chapterIndex+1} / {book.chapters.length}</span>
