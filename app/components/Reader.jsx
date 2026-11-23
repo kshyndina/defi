@@ -53,6 +53,7 @@ function Paragraph({ text, fontScale, fontFamily, onWord }) {
   const [display,setDisplay]=useState(text);
   const [assist,setAssist]=useState({mode:null,text:'',loading:false});
   useEffect(()=>{
+    if(/[\\u05B0-\\u05C7]/.test(text)) { setDisplay(text); return; }
     let dead=false; const node=ref.current; if(!node) return;
     const obs=new IntersectionObserver(async entries=>{
       if(!entries.some(e=>e.isIntersecting)) return;
@@ -107,7 +108,7 @@ export default function Reader({ book }) {
       <div className="reader-controls">
         <span className="niqqud-badge" title="Full niqqud is on">נִקּוּד ✓</span>
         <label className="control-select">
-          <span>Size</span>
+          <span>גֹּדֶל</span>
           <select value={fontScale} onChange={e=>setFontScale(Number(e.target.value))} aria-label="Text size">
             <option value=".88">S</option>
             <option value="1">M</option>
@@ -116,11 +117,11 @@ export default function Reader({ book }) {
           </select>
         </label>
         <label className="control-select">
-          <span>Font</span>
+          <span>גּוֹפָן</span>
           <select value={fontFamily} onChange={e=>setFontFamily(e.target.value)} aria-label="Reading font">
-            <option value="var(--font-book)">Book</option>
-            <option value="var(--font-clean)">Clean</option>
-            <option value="var(--font-classic)">Classic</option>
+            <option value="var(--font-book)">סִפְרִי</option>
+            <option value="var(--font-clean)">נָקִי</option>
+            <option value="var(--font-classic)">קְלָאסִי</option>
           </select>
         </label>
         <button onClick={()=>setDark(v=>!v)} aria-label="Theme">{dark?'☀︎':'☾'}</button>
@@ -128,20 +129,20 @@ export default function Reader({ book }) {
     </header>
     <div className="progress"><i style={{width:`${progress}%`}}/></div>
     <aside className={`sidebar ${sidebar?'open':''}`} dir="rtl">
-      <div className="sidebar-head"><span>תוכן העניינים</span><button className="mobile-only" onClick={()=>setSidebar(false)}>×</button></div>
+      <div className="sidebar-head"><span>תּוֹכֶן הָעִנְיָנִים</span><button className="mobile-only" onClick={()=>setSidebar(false)}>×</button></div>
       <nav>{book.chapters.map((c,i)=><button key={c.slug} className={i===chapterIndex?'active':''} onClick={()=>{setChapterIndex(i);setSidebar(false)}}><small>{c.number?String(c.number).padStart(2,'0'):'—'}</small><span>{c.title}</span></button>)}</nav>
     </aside>
     {sidebar&&<button className="sidebar-scrim mobile-only" onClick={()=>setSidebar(false)}/>}
     <section className="reading-column" dir="rtl">
-      <div className="chapter-kicker">{chapter.part || (chapter.number?`פרק ${chapter.number}`:'אחרית דבר')}</div>
+      <div className="chapter-kicker">{chapter.part || (chapter.number?`פֶּרֶק ${chapter.number}`:'אַחֲרִית דָּבָר')}</div>
       <h1>{chapter.title}</h1>
       {chapter.partSubtitle && chapter.part && chapter.number!==1 && <div className="part-subtitle">{chapter.partSubtitle}</div>}
       <div className="rule"/>
       {chapter.paragraphs.map((p,i)=><Paragraph key={`${chapter.slug}-${i}`} text={p} fontScale={fontScale} fontFamily={fontFamily} onWord={setSelection}/>)}
       <footer className="chapter-nav" dir="ltr">
-        <button disabled={chapterIndex===0} onClick={()=>setChapterIndex(i=>i-1)}>← Previous</button>
+        <button disabled={chapterIndex===0} onClick={()=>setChapterIndex(i=>i-1)}>← הַקּוֹדֵם</button>
         <span>{chapterIndex+1} / {book.chapters.length}</span>
-        <button disabled={chapterIndex===book.chapters.length-1} onClick={()=>setChapterIndex(i=>i+1)}>Next →</button>
+        <button disabled={chapterIndex===book.chapters.length-1} onClick={()=>setChapterIndex(i=>i+1)}>הַבָּא →</button>
       </footer>
     </section>
     <WordPopover selection={selection} onClose={()=>setSelection(null)}/>
