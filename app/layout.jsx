@@ -1,12 +1,13 @@
+import './globals.css';
+
 export const metadata = {
-  title: "Odd Hours — depth work for curious people",
-  description:
-    "Experiential psychology group workshops exploring the unconscious through conversation, symbols, drawing, intuition, imagination, play and other people.",
+  title: 'עיר של עצמות — קורא עברית',
+  description: 'Hebrew e-reader with contextual translation and transliteration',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="he" dir="rtl">
       <body>{children}</body>
     </html>
   );
