@@ -1,0 +1,32 @@
+name: Package Hebrew reader source
+
+on:
+  push:
+    branches:
+      - hebrew-reader
+    paths:
+      - .github/workflows/package-reader.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out reader branch
+        uses: actions/checkout@v4
+        with:
+          ref: hebrew-reader
+      - name: Create reader project archive
+        run: |
+          zip -qr /tmp/hebrew-reader-project.zip app lib data scripts .github package.json next.config.mjs
+          ls -lh /tmp/hebrew-reader-project.zip
+      - name: Upload reader project archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: hebrew-reader-project-source
+          path: /tmp/hebrew-reader-project.zip
+          if-no-files-found: error
+          retention-days: 14
